@@ -1,0 +1,15 @@
+.header_wrap {
+  padding: 15px 5%;
+  background: #030b1e;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  .route_wrap {
+    color: white;
+    .route_link {
+      padding: 0px 30px;
+    }
+  }
+}
