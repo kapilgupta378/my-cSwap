@@ -268,7 +268,7 @@ let myClient = null;
 export default function Home() {
   const [assets, setAssets] = useState([]);
   const [accountAddress, setAccountAddress] = useState("");
-  console.log(assets);
+  assets;
 
   const createQueryClient = (callback) => {
     return newQueryClientRPC(comdex?.rpc, callback);

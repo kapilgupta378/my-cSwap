@@ -1,6 +1,7 @@
 .overview_wrap {
-  height: 100vh;
+  min-height: 100vh;
   padding: 5%;
+
   background-image: linear-gradient(
     to right bottom,
     #112948,
@@ -16,4 +17,12 @@
     #561932,
     #681d2e
   );
+  .chart_wrap {
+    color: #fff;
+    .charts {
+      display: flex;
+      flex-direction: row;
+      gap: 30px;
+    }
+  }
 }
