@@ -34,12 +34,12 @@ const Pools = () => {
         ["total_volume_24h"]: "$" + value?.total_volume_24h.toFixed(2),
         ["total_volume_24h_change"]:
           value?.total_volume_24h_change.toFixed(2) > 0
-            ? "+" + value?.total_volume_24h_change.toFixed(2)
-            : value?.total_volume_24h_change.toFixed(2),
+            ? "+" + value?.total_volume_24h_change.toFixed(2) + "%"
+            : value?.total_volume_24h_change.toFixed(2) + "%",
         ["total_liquidity_24h_change"]:
           value?.total_liquidity_24h_change.toFixed(2) > 0
-            ? "+" + value?.total_liquidity_24h_change.toFixed(2)
-            : value?.total_liquidity_24h_change.toFixed(2),
+            ? "+" + value?.total_liquidity_24h_change.toFixed(2) + "%"
+            : value?.total_liquidity_24h_change.toFixed(2) + "%",
         ["id"]: value?.pair_id,
       }));
 
