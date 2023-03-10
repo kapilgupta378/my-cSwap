@@ -1,9 +1,8 @@
-import React from 'react'
+import Tokens from "@/src/containers/tokens";
+import React from "react";
 
 const TokenPage = () => {
-  return (
-    <div>TokenPage</div>
-  )
-}
+  return <Tokens />;
+};
 
-export default TokenPage
+export default TokenPage;
