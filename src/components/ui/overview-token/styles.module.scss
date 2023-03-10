@@ -1,0 +1,17 @@
+.heading {
+  color: #fff;
+  //   margin-bottom: 20px;
+}
+
+.overview_wrap {
+  h2 {
+    color: white;
+  }
+
+  .infos_wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
