@@ -4,7 +4,8 @@ import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 const inter = Inter({ subsets: ["latin"] });
 import Long from "long";
-import { QueryClientImpl } from "comdex-codec/build/comdex/asset/v1beta1/query";
+// import { QueryClientImpl } from "comdex-codec/build/comdex/asset/v1beta1/query";
+import { QueryClientImpl } from "cosmjs-types/cosmos/bank/v1beta1/query";
 import { useCallback, useEffect, useState } from "react";
 import { createProtobufRpcClient, QueryClient } from "@cosmjs/stargate";
 import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
@@ -61,6 +62,22 @@ export const envConfig = {
   },
 };
 
+const comdex = {
+  chainId: envConfig?.chainId,
+  chainName: envConfig?.chainName,
+  rpc: envConfig?.rpc,
+  rest: envConfig?.rest,
+  explorerUrlToTx: envConfig?.explorerUrlToTx,
+  walletUrlForStaking: envConfig?.walletUrlForStaking,
+  coinDenom: envConfig?.coinDenom,
+  coinMinimalDenom: envConfig?.coinMinimalDenom,
+  coinDecimals: envConfig?.coinDecimals,
+  prefix: envConfig?.prefix,
+  coinType: envConfig?.coinType,
+  symbol: envConfig?.symbol,
+  webSocketApiUrl: envConfig?.webSocketApiUrl,
+};
+
 const getIbcDenomsMap = () => {
   let myMap = {};
 
@@ -107,22 +124,6 @@ export const tokenCoinGeckoIds = [
   "secret",
   "injective-protocol",
 ];
-
-const comdex = {
-  chainId: envConfig?.chainId,
-  chainName: envConfig?.chainName,
-  rpc: envConfig?.rpc,
-  rest: envConfig?.rest,
-  explorerUrlToTx: envConfig?.explorerUrlToTx,
-  walletUrlForStaking: envConfig?.walletUrlForStaking,
-  coinDenom: envConfig?.coinDenom,
-  coinMinimalDenom: envConfig?.coinMinimalDenom,
-  coinDecimals: envConfig?.coinDecimals,
-  prefix: envConfig?.prefix,
-  coinType: envConfig?.coinType,
-  symbol: envConfig?.symbol,
-  webSocketApiUrl: envConfig?.webSocketApiUrl,
-};
 
 const getCurrencies = (chain) => {
   if (chain?.rpc === comdex?.rpc) {
@@ -195,19 +196,33 @@ const getChainConfig = (chain = comdex) => {
     features: chain?.features,
   };
 };
-
-const initializeChain = (callback) => {
+const initializeIBCChain = (config, callback) => {
   (async () => {
-    let isNoExtensionExists = !window.getOfflineSigner || !window.keplr;
+    let walletType = localStorage.getItem("loginType");
+
+    let isNoExtensionExists =
+      walletType === "keplr"
+        ? !window.getOfflineSigner || !window.keplr
+        : !window?.leap?.getOfflineSigner || !window.wallet;
 
     if (isNoExtensionExists) {
-      const error = `Please install wallet extension`;
+      const error = `Please install ${walletType} wallet extension`;
       callback(error);
     } else {
-      if (window.keplr.experimentalSuggestChain) {
+      let suggestChain =
+        walletType === "keplr"
+          ? window.keplr.experimentalSuggestChain
+          : window.leap.experimentalSuggestChain;
+
+      if (suggestChain) {
         try {
-          await window.keplr.experimentalSuggestChain(getChainConfig());
-          const offlineSigner = window.getOfflineSigner(comdex?.chainId);
+          walletType === "keplr"
+            ? await window.keplr.experimentalSuggestChain(config)
+            : await window.leap.experimentalSuggestChain(config);
+          const offlineSigner =
+            walletType === "keplr"
+              ? window.getOfflineSigner(config?.chainId)
+              : window?.leap?.getOfflineSigner(config?.chainId);
           const accounts = await offlineSigner.getAccounts();
 
           callback(null, accounts[0]);
@@ -215,53 +230,12 @@ const initializeChain = (callback) => {
           callback(error?.message);
         }
       } else {
-        const versionError = `Please use the recent version of ${walletType} wallet extension`;
+        const versionError = "Please use the recent version of keplr extension";
         callback(versionError);
       }
     }
   })();
 };
-
-// const initializeIBCChain = (config, callback) => {
-//   (async () => {
-//     let walletType = localStorage.getItem("loginType");
-
-//     let isNoExtensionExists =
-//       walletType === "keplr"
-//         ? !window.getOfflineSigner || !window.keplr
-//         : !window?.leap?.getOfflineSigner || !window.wallet;
-
-//     if (isNoExtensionExists) {
-//       const error = `Please install ${walletType} wallet extension`;
-//       callback(error);
-//     } else {
-//       let suggestChain =
-//         walletType === "keplr"
-//           ? window.keplr.experimentalSuggestChain
-//           : window.leap.experimentalSuggestChain;
-
-//       if (suggestChain) {
-//         try {
-//           walletType === "keplr"
-//             ? await window.keplr.experimentalSuggestChain(config)
-//             : await window.leap.experimentalSuggestChain(config);
-//           const offlineSigner =
-//             walletType === "keplr"
-//               ? window.getOfflineSigner(config?.chainId)
-//               : window?.leap?.getOfflineSigner(config?.chainId);
-//           const accounts = await offlineSigner.getAccounts();
-
-//           callback(null, accounts[0]);
-//         } catch (error) {
-//           callback(error?.message);
-//         }
-//       } else {
-//         const versionError = "Please use the recent version of keplr extension";
-//         callback(versionError);
-//       }
-//     }
-//   })();
-// };
 
 let myClient = null;
 
@@ -315,7 +289,7 @@ export default function Home() {
   //       callback(error);
   //       return;
   //     }
-  //     debugger;
+  //      ;
   //     queryService
   //       .QueryAssets({
   //         pagination: {
@@ -345,57 +319,56 @@ export default function Home() {
   //   });
   // };
 
-  // const getQueryService = (callback) => {
-  //   if (myClient) {
-  //     const queryService = new QueryClientImpl(myClient);
+  const getQueryService = (callback) => {
+    if (myClient) {
+      const queryService = new QueryClientImpl(myClient);
 
-  //     return callback(null, queryService);
-  //   } else {
-  //     createQueryClient((error, client) => {
-  //       if (error) {
-  //         return callback(error);
-  //       }
+      return callback(null, queryService);
+    } else {
+      createQueryClient((error, client) => {
+        if (error) {
+          return callback(error);
+        }
 
-  //       myClient = client;
-  //       const queryService = new QueryClientImpl(client);
+        myClient = client;
+        const queryService = new QueryClientImpl(client);
 
-  //       return callback(null, queryService);
-  //     });
-  //   }
-  // };
+        return callback(null, queryService);
+      });
+    }
+  };
 
-  // const queryAllBalances = (owner, callback) => {
-  //   getQueryService((error, queryService) => {
-  //     if (error) {
-  //       callback(error);
-  //       return;
-  //     }
+  const queryAllBalances = (owner, callback) => {
+    getQueryService((error, queryService) => {
+      if (error) {
+        callback(error);
+        return;
+      }
 
-  //     queryService
-  //       .AllBalances({
-  //         address: owner,
-  //       })
-  //       .then((result) => {
-  //         callback(null, result);
-  //       })
-  //       .catch((error) => {
-  //         callback(error?.message);
-  //       });
-  //   });
-  // };
+      queryService
+        .AllBalances({
+          address: owner,
+        })
+        .then((result) => {
+          callback(null, result);
+        })
+        .catch((error) => {
+          callback(error?.message);
+        });
+    });
+  };
 
-  // const fetchBalances = (address) => {
-  //   debugger;
-  //   queryAllBalances(address, (error, result) => {
-  //     if (error) {
-  //       console.error(error);
+  const fetchBalances = (address) => {
+    queryAllBalances(address, (error, result) => {
+      if (error) {
+        console.error(error);
 
-  //       return;
-  //     }
-  //     setAccountBalances(result.balances, result.pagination);
-  //     calculateAssetBalance(result.balances);
-  //   });
-  // };
+        return;
+      }
+      setAccountBalances(result.balances, result.pagination);
+      calculateAssetBalance(result.balances);
+    });
+  };
   // useEffect(() => {
   //   connect();
   // }, []);
@@ -403,29 +376,31 @@ export default function Home() {
   //   if (accountAddress) fetchBalances(accountAddress);
   // }, [accountAddress]);
 
-  // const connect = async () => {
-  //   const chainId = comdex.chainId;
+  const connect = async () => {
+    const chainId = comdex.chainId;
 
-  //   // Enabling before using the Keplr is recommended.
-  //   // This method will ask the user whether to allow access if they haven't visited this website.
-  //   // Also, it will request that the user unlock the wallet if the wallet is locked.
-  //   await initializeChain((error, account) => {
-  //     if (error) {
-  //       console.error(error);
-  //       return;
-  //     }
-  //     debugger;
-  //     setAccountAddress(account.address);
-  //   });
-  //   await window.keplr.enable(chainId);
-  //   // fetchAssets(
-  //   //   0,
-  //   //   100, // taking 100 records
-  //   //   true,
-  //   //   false
-  //   // );
-  //   // fetchBalances(accountAddress);
-  // };
+    // Enabling before using the Keplr is recommended.
+    // This method will ask the user whether to allow access if they haven't visited this website.
+    // Also, it will request that the user unlock the wallet if the wallet is locked.
+    let address;
+    await initializeChain((error, account) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+      address = account.address;
+      setAccountAddress(account.address);
+    });
+    await window.keplr.enable(chainId);
+    // fetchAssets(
+    //   0,
+    //   100, // taking 100 records
+    //   true,
+    //   false
+    // );
+    //  ;
+    // fetchBalances(address);
+  };
 
   return <OverView />;
 }
