@@ -1,0 +1,25 @@
+.pool_wrap {
+  min-height: 100vh;
+  padding: 5%;
+  background-image: linear-gradient(
+    to right bottom,
+    #112948,
+    #13233e,
+    #141d34,
+    #13182b,
+    #111222,
+    #151224,
+    #191225,
+    #1e1226,
+    #30152e,
+    #431732,
+    #561932,
+    #681d2e
+  );
+
+  h2 {
+    font-size: 25px;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+}
