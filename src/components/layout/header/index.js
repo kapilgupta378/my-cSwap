@@ -31,6 +31,7 @@ const Header = () => {
       const offlineSigner = window.getOfflineSigner(comdex?.chainId);
       const accounts = await offlineSigner.getAccounts();
       setAccountAddress(accounts[0].address);
+      localStorage.setItem("address", accounts[0].address);
     } catch (error) {
       initializeChain(getWallet);
     }
@@ -76,6 +77,13 @@ const Header = () => {
           href={"/tokens"}
         >
           Tokens
+        </Link>
+        <Link
+          style={{ color: router.pathname === "/portfolio" ? "#73aed2" : "" }}
+          className={styles.route_link}
+          href={"/portfolio"}
+        >
+          Portfolio
         </Link>
       </div>
       <div>
