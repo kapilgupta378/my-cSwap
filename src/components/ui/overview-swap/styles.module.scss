@@ -1,0 +1,27 @@
+.heading {
+  color: #fff;
+  //   margin-bottom: 20px;
+}
+.infos_wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+@media only screen and (max-width: 479px) {
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  .infos_wrap {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+} /* 375 */

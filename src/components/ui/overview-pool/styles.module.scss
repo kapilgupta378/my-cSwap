@@ -12,6 +12,28 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
     justify-content: space-between;
   }
 }
+
+@media only screen and (max-width: 479px) {
+  .overview_wrap {
+    h3 {
+      text-align: center;
+    }
+  }
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  .infos_wrap {
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+} /* 375 */

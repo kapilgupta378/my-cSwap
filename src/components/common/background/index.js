@@ -1,8 +1,18 @@
 import React from "react";
-import styles from "./styles.module.scss";
+
 const Background = ({ children, ...rest }) => {
   return (
-    <div {...rest} className={styles.bg_wrap}>
+    <div
+      style={{
+        margin: "30px 0px",
+        padding: "30px",
+        background: "#030b1e",
+        border: "1px solid #303950",
+        boxShadow: "inset 5px 5px 12px 1px #262b38",
+        borderRadius: "20px",
+      }}
+      {...rest}
+    >
       {children}
     </div>
   );

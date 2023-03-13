@@ -13,5 +13,30 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
   }
 }
+
+@media only screen and (max-width: 479px) {
+  .heading {
+    text-align: center;
+  }
+  .overview_wrap {
+    h2 {
+      text-align: center;
+    }
+  }
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  .infos_wrap {
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+} /* 375 */

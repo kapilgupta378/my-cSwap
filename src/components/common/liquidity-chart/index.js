@@ -1,5 +1,5 @@
 import React from "react";
-import Background from "../../common/background";
+import Background from "../background";
 import styles from "./styles.module.scss";
 import {
   AreaChart,
@@ -8,6 +8,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  ResponsiveContainer,
 } from "recharts";
 // const data = [
 //   {
@@ -59,9 +60,11 @@ const LiquidityChart = ({
   XAxisDataKey,
   areaDataKey,
   liquidity = 0,
+
+  ...rest
 }) => {
   return (
-    <Background>
+    <Background {...rest}>
       <div className={styles.header}>
         <div>
           <p>Liquidity</p>
@@ -70,30 +73,30 @@ const LiquidityChart = ({
         <div></div>
       </div>
 
-      <div className={styles.area_chart_wrap}>
-        <AreaChart
-          id="AreaChart "
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0,
-          }}
-        >
-          <XAxis id="XAxis" dataKey={XAxisDataKey} tickCount={40} />
-          <YAxis id="YAxis" dataKey={YAxisDataKey} tickCount={40} />
-          <Tooltip />
-          <Area
-            id="Area"
-            type="monotone"
-            dataKey={areaDataKey}
-            stroke="#007bff"
-            fill="#374e66"
-          />
-        </AreaChart>
+      <div style={{ height: "85%" }} className={styles.area_chart_wrap}>
+        <ResponsiveContainer>
+          <AreaChart
+            id="AreaChart"
+            data={data}
+            margin={{
+              top: 0,
+              right: 0,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <XAxis id="XAxis" dataKey={XAxisDataKey} tickCount={40} />
+            <YAxis id="YAxis" dataKey={YAxisDataKey} tickCount={40} />
+            <Tooltip />
+            <Area
+              id="Area"
+              type="monotone"
+              dataKey={areaDataKey}
+              stroke="#007bff"
+              fill="#374e66"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     </Background>
   );

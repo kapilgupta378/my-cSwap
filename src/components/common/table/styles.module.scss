@@ -68,3 +68,9 @@
     }
   }
 }
+
+@media only screen and (max-width: 979px) {
+  .table_wrap {
+    overflow-y: scroll;
+  }
+} /* 768 */

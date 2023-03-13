@@ -23,6 +23,22 @@
       display: flex;
       flex-direction: row;
       gap: 30px;
+      flex-wrap: wrap;
+      .chart {
+        width: 48%;
+      }
     }
   }
 }
+
+@media only screen and (max-width: 979px) {
+  .overview_wrap {
+    .chart_wrap {
+      .charts {
+        .chart {
+          width: 100%;
+        }
+      }
+    }
+  }
+} /* 768 */

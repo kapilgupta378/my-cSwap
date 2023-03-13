@@ -1,8 +1,8 @@
 import Loading from "@/src/components/common/loading";
-import LiquidityChart from "@/src/components/ui/liquidity-chart";
+import LiquidityChart from "@/src/components/common/liquidity-chart";
 import OverViewPool from "@/src/components/ui/overview-pool";
 import OverViewToken from "@/src/components/ui/overview-token";
-import VolumeChart from "@/src/components/ui/volume-chart";
+import VolumeChart from "@/src/components/common/volume-chart";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -54,12 +54,14 @@ const TokenDetail = () => {
           {historyData.length != 0 && (
             <>
               <LiquidityChart
+                className={"chart"}
                 data={historyData}
                 YAxisDataKey={"liquidity"}
                 areaDataKey={"liquidity"}
                 liquidity={overviewData.liquidity.toFixed(2)}
               />
               <VolumeChart
+                className={"chart"}
                 data={historyData.slice(0, 30)}
                 barDataKey={"volume_24h"}
                 volume={overviewData.total_volume_24h.toFixed(2)}

@@ -95,3 +95,13 @@ a {
     color-scheme: dark;
   }
 }
+
+.chart {
+  width: 48%;
+}
+
+@media only screen and (max-width: 979px) {
+  .chart {
+    width: 100%;
+  }
+} /* 768 */

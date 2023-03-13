@@ -7,8 +7,10 @@ import logoIcon from "../../../../public/assets/images/cSwap LIGHT.svg";
 import { useRouter } from "next/router";
 import { comdex, envConfig } from "@/src/services/config";
 import { initializeChain } from "@/src/services/wallet";
+import hamburgerIcon from "../../../../public/assets/images/icons8-menu-rounded-50.png";
 const Header = () => {
   const [accountAddress, setAccountAddress] = useState("");
+  const [openHum, setOpenHum] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -86,11 +88,63 @@ const Header = () => {
           Portfolio
         </Link>
       </div>
-      <div>
+      <div className={styles.connect_btn}>
         <Button
           onClick={() =>
             accountAddress ? disconnectWallet() : connectWallet()
           }
+        >
+          {accountAddress ? "Disconnect" : "Connect"}
+        </Button>
+      </div>
+      <div
+        onClick={() => setOpenHum((value) => !value)}
+        className={styles.hamburger}
+      >
+        <Image src={hamburgerIcon} width={40} height={40} alt="hamburger" />
+      </div>
+      <div
+        style={{ display: openHum ? "flex" : "none" }}
+        className={styles.hamburger_nav}
+      >
+        <Link
+          onClick={() => setOpenHum(false)}
+          style={{ color: router.pathname === "/" ? "#73aed2" : "" }}
+          className={styles.route_link}
+          href={"/"}
+        >
+          Overview
+        </Link>
+
+        <Link
+          onClick={() => setOpenHum(false)}
+          style={{ color: router.pathname === "/pools" ? "#73aed2" : "" }}
+          className={styles.route_link}
+          href={"/pools"}
+        >
+          Pools
+        </Link>
+        <Link
+          onClick={() => setOpenHum(false)}
+          style={{ color: router.pathname === "/tokens" ? "#73aed2" : "" }}
+          className={styles.route_link}
+          href={"/tokens"}
+        >
+          Tokens
+        </Link>
+        <Link
+          onClick={() => setOpenHum(false)}
+          style={{ color: router.pathname === "/portfolio" ? "#73aed2" : "" }}
+          className={styles.route_link}
+          href={"/portfolio"}
+        >
+          Portfolio
+        </Link>
+        <Button
+          onClick={() => {
+            accountAddress ? disconnectWallet() : connectWallet();
+            setOpenHum(false);
+          }}
         >
           {accountAddress ? "Disconnect" : "Connect"}
         </Button>

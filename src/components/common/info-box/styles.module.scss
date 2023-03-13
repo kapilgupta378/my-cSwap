@@ -16,3 +16,14 @@
     }
   }
 }
+
+@media only screen and (max-width: 479px) {
+  .info_box_wrap {
+    p {
+      text-align: center;
+    }
+    div {
+      text-align: center;
+    }
+  }
+}
