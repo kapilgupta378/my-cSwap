@@ -26,7 +26,7 @@ const OverViewSwap = ({ data }) => {
               />
               <InfoBox
                 heading={"CMDX Price"}
-                info={`$${data?.fee_distributed?.toFixed(2)}`}
+                info={`$${data?.price?.toFixed(2)}`}
                 lastChange={""}
               />
               <InfoBox

@@ -18,9 +18,16 @@ const OverView = () => {
   const fetchOverviewData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(
+      let res = await axios.get(
         "https://stat.comdex.one/api/v2/cswap/overview"
       );
+      const resToken = await axios.get(
+        "https://stat.comdex.one/api/v2/cswap/tokens/all"
+      );
+      const CMDXTokenData = resToken.data.data.find(
+        (data) => data.symbol === "CMDX"
+      );
+      res.data.data.price = CMDXTokenData.price;
       setOverviewData(res.data.data);
     } catch (error) {}
     await fetchData();
